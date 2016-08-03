@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Weisd Blog</title>
-    <link>http://replace-this-with-your-hugo-site.com/</link>
+    <link>http://weisd.in/</link>
     <description>Recent content on Weisd Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-Hans</language>
     <lastBuildDate>Tue, 02 Aug 2016 23:46:34 +0800</lastBuildDate>
-    <atom:link href="http://replace-this-with-your-hugo-site.com/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://weisd.in/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>hello</title>
-      <link>http://replace-this-with-your-hugo-site.com/posts/hello/</link>
+      <link>http://weisd.in/posts/hello/</link>
       <pubDate>Tue, 02 Aug 2016 23:46:34 +0800</pubDate>
       
-      <guid>http://replace-this-with-your-hugo-site.com/posts/hello/</guid>
+      <guid>http://weisd.in/posts/hello/</guid>
       <description>&lt;pre&gt;&lt;code&gt;package main
 
 import (
