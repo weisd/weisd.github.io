@@ -71,14 +71,14 @@ parse_args() {
 
 	# Source directory & target branch.
 	deploy_directory=${GIT_DEPLOY_DIR:-public}
-	deploy_branch=${GIT_DEPLOY_BRANCH:-gh-pages}
+	deploy_branch=${GIT_DEPLOY_BRANCH:-master}
 
 	#if no user identity is already set in the current git environment, use this:
 	default_username=${GIT_DEPLOY_USERNAME:-deploy.sh}
 	default_email=${GIT_DEPLOY_EMAIL:-}
 
 	#repository to deploy to. must be readable and writable.
-	repo=${GIT_DEPLOY_REPO:-origin}
+	repo=${GIT_DEPLOY_REPO:-coding}
 
 	#append commit hash to the end of message by default
 	append_hash=${GIT_DEPLOY_APPEND_HASH:-true}
