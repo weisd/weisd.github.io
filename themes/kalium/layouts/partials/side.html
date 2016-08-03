@@ -1,0 +1,47 @@
+<div class="blog-sidebar">
+	<!-- <div class="sidebar-box-holder wp-widget search-2 widget_search">
+		<div class="widget_search wp-widget">
+			<form role="search" method="get" class="search-form search-bar" action="http://demo.kaliumtheme.com/main/">
+				<label>
+					<span class="screen-reader-text">Search for:</span>
+					<input type="search" class="form-control search-field" placeholder="Search site..." value="" name="s" id="s" title="Search for:">
+				</label>
+				<input type="submit" class="search-submit go-button" id="searchsubmit" value="Go">
+			</form>
+		</div>
+	</div> -->
+	
+	<div class="sidebar-box-holder wp-widget categories-2 widget_categories">
+		<h3 class="sidebar-entry-title">分类</h3>	
+		<ul>
+			{{ range $name, $taxonomy := .Site.Taxonomies.categories }}
+			    <a href="" class="tag-link-26 tag-link-position-1" title="1 topic" style="font-size: 8pt;"></a>
+			    <li class="cat-item cat-item-7"><a href="/categories/{{ $name | urlize }}">{{ $name }}</a></li>
+			{{ end }}
+			
+		</ul>
+	</div>
+	<div class="sidebar-box-holder wp-widget tag_cloud-2 widget_tag_cloud">
+		<h3 class="sidebar-entry-title">标签</h3>
+		<div class="tagcloud">
+			{{ range $name, $taxonomy := .Site.Taxonomies.tags }}
+			    <a href="/tags/{{ $name | urlize }}" class="tag-link-26 tag-link-position-1" title="1 topic" style="font-size: 8pt;">{{ $name }}</a>
+			{{ end }}
+		</div>
+	</div>
+
+	<!-- <div class="sidebar-box-holder wp-widget recent-comments-3 widget_recent_comments">
+		<h3 class="sidebar-entry-title">Comments.</h3>
+		<ul id="recentcomments">
+			<li class="recentcomments"><span class="comment-author-link">inchenaim</span> on <a href="#">Best Tips for a Successful Magazine</a></li>
+		</ul>
+	</div>	 -->
+	<!-- <div class="sidebar-box-holder wp-widget recent-posts-2 widget_recent_entries">		
+		<h3 class="sidebar-entry-title">Latest Posts.</h3>		
+		<ul>
+			<li>
+	<a href="#">Fashions fade, style is eternal</a>
+			</li>
+		</ul>
+	</div>	 -->	
+</div>

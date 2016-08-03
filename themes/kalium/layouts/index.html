@@ -1,0 +1,46 @@
+{{partial "header.html" .}}
+
+<script type="text/javascript">
+	var headerOptions = {"stickyMenu":false,"currentMenuSkin":"menu-skin-dark"};
+</script>
+<!-- <div class="container page-heading-title">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="section-title">
+				<h2>笔记</h2>
+				<p>各种源码解读</p>
+			</div>
+		</div>
+	</div>
+</div>
+ -->
+<div class="container page-heading-title">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="section-title">
+				<h2>Weisd</h2>
+				<p>golang 是最好的编程语言</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="blog-holder">
+		<div class="row">
+			<div class="col-sm-12 col-md-9 clearfix sidebar-present">
+				<div class="blog-posts-holder portfolio-holder">
+					{{ range .Paginator.Pages }}
+	                    {{ .Render "summary" }}
+	                {{ end }}
+					
+				</div>				
+				{{ partial "paginator.html" . }}	
+			</div>
+			<div class="col-md-3 col-sm-12">
+				{{partial "side.html" .}}
+			</div>
+		</div>
+	</div>
+</div>
+{{partial "footer.html" .}}

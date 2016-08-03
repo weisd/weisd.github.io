@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="{{.Site.LanguageCode}}"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="{{.Site.LanguageCode}}"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="{{.Site.LanguageCode}}"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html lang="{{.Site.LanguageCode}}" class=" js flexbox flexboxlegacy no-touch rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent">
+<!--<![endif]-->
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{{.Title}}</title>
+
+ 	<link rel="alternate" type="application/rss+xml" title="Weisd » Feed" href="/feed">
+
+	<link rel="stylesheet" id="rotatingtweets-css" href="/css/style.css" type="text/css" media="all">
+	<link rel="stylesheet" id="bootstrap-css" href="/css/bootstrap.css" type="text/css" media="all">
+	<link rel="stylesheet" id="main-css" href="/css/main.css" type="text/css" media="all">
+	<link rel="stylesheet" id="font-awesome-css" href="/css/font-awesome.css" type="text/css" media="all">
+	<link rel="stylesheet" id="font-flaticons-css" href="/css/flaticon.css" type="text/css" media="all">
+	<link rel="stylesheet" id="font-lineaicons-css" href="/css/linea_iconfont.css" type="text/css" media="all">
+
+	<link rel="stylesheet" href="/highlight/styles/monokai-sublime.css">
+
+	<link rel="shortcut icon" href="/images/logo-min.png">
+	<link rel="apple-touch-icon-precomposed" href="/images/logo-min.png">
+	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/logo-min.png">
+	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/logo-min.png">
+	<meta name="theme-color" content="#00b19e">
+	<style id="theme-custom-css">
+	.message-form .form-group .placeholder {padding-bottom: 1px;}.message-form .form-group .placeholder label {    margin-bottom: 5px;}.lab-colored-submenu a {    color: #ee7c33 !important;}.lab-colored-submenu a:after {    background-color: #ee7c33 !important;}@media screen and (max-width: 480px){.second-slide-text {left: 15px;}.arrow-button {right: 15px;}}
+	</style>		
+	<style type="text/css">
+	.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}
+	</style>
+	<!--[if lte IE 9]>
+	<link rel="stylesheet" type="text/css" href="/css/vc_lte_ie9.min.css" media="screen">
+	<![endif]-->
+	<!--[if IE  8]>
+	<link rel="stylesheet" type="text/css" href="/css/vc-ie8.min.css" media="screen">
+	<![endif]-->
+</head>
+<body class="blog body-lg-skin-kalium-default wpb-js-composer js-comp-ver-4.12 vc_responsive">
+	<!-- 小屏侧边栏 -->
+	<div class="mobile-menu-wrapper">
+		<div class="mobile-menu-container  ps-container ps-theme-default" data-ps-id="ba537358-e9f8-6c4b-b48f-7203ada951fd">
+			<ul id="menu-main-menu" class="menu">
+				{{ range .Site.Menus.main }}
+				<li  class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home "><a href="{{.URL}}">{{ .Name }}</a></li>
+				{{end}}
+			</ul>
+			<div class="single-blog-holder " style=" padding: 10px 30px;">
+	    			<div class="author-info-placement-left">
+		    			<div class="blog-author-holder has-no-description">
+							<div class="author-avatar">
+								<a href="/" class="author-link">
+									<img alt="" src="/images/logo.jpg" srcset="" class="avatar avatar-192 photo" height="192" width="192">
+								</a>	
+							</div>
+						</div>		    			
+						<div class="details">
+							<div class="date">
+								<i class="icon icon-basic-male"></i>{{.Site.Params.author}}
+							</div>
+							<div class="date">
+								<i class="icon icon-basic-geolocalize-05"></i>{{ .Site.Params.address }}	
+							</div>
+							<div class="date">
+								<i class="icon icon-basic-mail"></i>{{ .Site.Params.email }}	
+							</div>
+							<div class="date">
+								<i class="icon icon-basic-link"></i>{{ .Site.BaseURL }}	
+							</div>
+							<div class="date">
+								<i class="icon icon-basic-laptop"></i>{{ .Site.Params.email }}	
+							</div>
+						</div>
+	    			</div>
+	    		</div>	
+				
+			<div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 3px;">
+				<div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+			</div>
+			<div class="ps-scrollbar-y-rail" style="top: 0px; right: 3px;">
+				<div class="ps-scrollbar-y" tabindex="0" style="top: 0px; height: 0px;"></div>
+			</div>
+		</div>
+	
+	</div>
+
+	<div class="mobile-menu-overlay"></div>
+	<!-- 顶部隐藏菜单 -->
+	
+
+	<!-- 用户侧边 -->
+	{{partial "sidebar_user.html" .}}
+
+	<div class="sidebar-menu-disabler"></div>
+	
+
+	<div class="wrapper" id="main-wrapper">
+		<!-- 顶部导航条 -->
+		<header class="main-header menu-type-standard-menu">
+			<div class="container">
+				<div class="logo-and-menu-container">	
+					<!-- <div class="logo-column">
+						<style>.logo-image {width: 50px}</style>
+						<a href="/" class="header-logo logo-image">
+							<img src="/images/logo.jpg" width="100" height="100" class="main-logo" alt="kalium">
+						</a>
+					</div>	 -->			
+					<div class="menu-column">
+						<div class="standard-menu-container menu-bar-root-items-hidden menu-skin-dark reveal-fade items-visible">
+							<a class="menu-bar menu-skin-dark " href="#">
+								<span class="ham"></span>
+							</a>						
+							<nav>
+								<ul id="menu-main-menu-1" class="menu">
+
+        							{{ range .Site.Menus.main }}
+        							<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-2328"><a href="{{.URL}}">{{ .Name }}</a></li>
+        							{{end}}
+        							<!-- <li class="top-menu-toggle menu-item menu-item-type-post_type menu-item-object-page menu-item-3590">
+        								<a href="/main/portfolio-2-col/">top-menu-toggle</a>
+        							</li>
+									<li class="sidebar-menu-toggle  menu-item menu-item-type-post_type menu-item-object-page menu-item-3592">
+										<a href="/main/portfolio-3-col/">sidebar-menu-toggle</a>
+									</li> -->
+								</ul>
+							</nav>
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>

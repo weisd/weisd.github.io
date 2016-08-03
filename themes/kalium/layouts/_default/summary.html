@@ -1,0 +1,36 @@
+<div class="box-holder blog-rounded do-lazy-load-on-shown post-formats-loop-disabled post-2995 post type-post status-publish format-standard has-post-thumbnail hentry category-everyday-life loading-finished">
+	<div class="row">
+    	<div class="col-sm-12">
+	    	<div class="post-info">
+	    		<h2>
+		    		<a href="{{ .Permalink }}">{{.Title}}</a>
+		    	</h2>
+		    	<div>
+	    		{{.Summary}}
+	    		{{ if .Truncated }}
+	    			
+			            <a href="{{ .RelPermalink }}">查看更多</a>
+			       
+			    {{ end }}
+
+	    		<p class="read-more-link">
+	    		
+			     </p>
+			    </div>
+	    		<div class="details">
+					<div class="date">
+						<i class="icon icon-basic-calendar"></i>{{ .Date.Format "2006-01-02 15:04" }}	
+					</div>
+					{{if .Params.tags}}
+					<div class="category">
+						<i class="icon icon-basic-bookmark"></i>
+						{{ range  .Params.tags}}
+	    					<a href="/tags/{{. | urlize}}" rel="tag">{{.}}</a> 
+	    				{{end}}	
+					</div>
+					{{end}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,30 @@
+{{ if gt .Paginator.TotalPages 1 }}
+<div class="pagination-container align-center">
+	 {{ if gt .Paginator.PageNumber 1 }}
+	    <a class=" page-numbers" href="{{ .Paginator.First.URL }}">首页</a>
+	 {{ end }}
+	
+	{{ if .Paginator.HasPrev }}
+        <a class=" page-numbers" href="{{ .Paginator.Prev.URL }}">上一页 </a>
+    {{ end }}
+	
+	{{ range .Paginator.Pagers }}
+        {{ $preNum := sub $.Paginator.PageNumber  .PageNumber }}
+        {{ if and (lt  $preNum  5 ) (gt $preNum -5) }}
+        	{{ if eq .PageNumber $.Paginator.PageNumber }}
+        	<span class="page-numbers current">{{ .PageNumber }}</span>
+        	{{else}}
+        	<a class="page-numbers" href="{{ .URL }}">{{ .PageNumber }}</a>
+        	{{ end }} 
+        {{ end }}
+    {{ end }}
+	
+	{{ if .Paginator.HasNext }}
+	<a class=" page-numbers" href="{{ .Paginator.Next.URL }}">下一页</a>
+	{{ end }}
+	
+	{{ if gt .Paginator.TotalPages .Paginator.PageNumber  }}
+    <a class=" page-numbers" href="{{ .Paginator.Last.URL }}">尾页</a>
+	{{ end }}
+</div>
+{{ end }}

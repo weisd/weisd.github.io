@@ -1,0 +1,102 @@
+{{partial "header.html" .}}
+<script type="text/javascript">
+	var headerOptions = {"stickyMenu":false,"currentMenuSkin":"menu-skin-dark"};
+</script>
+<div class="single-blog-holder post-2931 post type-post status-publish format-standard has-post-thumbnail hentry category-magazine tag-envato tag-kalium tag-laborator tag-themeforest">
+    <div class="container">
+		<div class="blog-head-holder  do-lazy-load-on-shown nivo loading-finished">
+		</div>
+    	<div class="page-container">
+			<div class="row">
+				<div class="col-md-10 col-sm-9-x clearfix">
+	    			<div class="row">
+		    			<div class="col-xs-12">
+			    			<div class="blog-content-holder">
+					    		<div class="section-title blog-title">
+						    		<h1>{{.Title}}</h1>
+						    		
+						    	</div>
+			    				<div class="post-content post-formatting">
+			    				{{.Content}}
+			    				</div>
+
+				    			<div class="tags-holder">
+				    				{{ range  .Params.tags}}
+				    				<a href="/tags/{{. | urlize}}" rel="tag">{{.}}</a> 
+				    				{{end}}
+				    			</div>		    				
+				    		</div>
+		    			</div>
+
+						<!-- share partial -->
+	    			</div>
+    			</div>
+				<div class="col-md-2 col-sm-3-x col-xs-12  pull-right-md">
+	    			<div class="author-info-placement-left">
+		    			<div class="blog-author-holder has-no-description">
+							<div class="author-avatar">
+								<a href="/" class="author-link">
+									<img alt="" src="/images/logo.jpg" srcset="" class="avatar avatar-192 photo" height="192" width="192">
+								</a>	
+							</div>
+	
+							<div class="author-details">
+								<a href="/" class="author-link">		
+									<span class="author-name">
+										{{.Site.Params.author}}
+									</span>
+								</a>		
+							</div>
+						</div>		    			
+						<div class="details">
+							<div class="date">
+								<i class="icon icon-basic-calendar"></i>{{ .Date.Format "2006-01-02 15:04" }}	
+							</div>
+							
+							<div class="category">
+								<i class="icon icon-basic-folder-multiple"></i>
+								{{ range  .Params.categories}}
+								<a href="/categories/{{. | urlize}}" rel="category tag">{{.}}</a>	
+								{{end}}	
+							</div>
+						</div>
+	    			</div>
+    			</div>
+    			
+    		</div>
+
+    		<div class="row">
+				<div class="col-sm-12">
+					<div class="post-controls">
+						
+						{{if .PrevInSection}}
+						<a href="{{.PrevInSection.Permalink}}" class="prev-post">
+							<span class="prev arrow">
+								<i class="flaticon-arrow427"></i>
+							</span>
+							<span class="post-title">
+								<em>上一篇</em>
+								<strong>{{.PrevInSection.Title}}</strong>
+							</span>
+						</a>
+						{{end}}
+
+						{{if .NextInSection}}	
+						<a href="{{.NextInSection.Permalink}}" class="next-post">
+							<span class="next arrow">
+								<i class="flaticon-arrow413"></i>
+							</span>
+							<span class="post-title">
+								<em>下一篇</em>
+								<strong>{{.NextInSection.Title}}</strong>
+							</span>
+						</a>
+						{{end}}
+					</div>
+				</div>
+			</div>		
+		</div>
+    </div>
+	<!-- commet partial -->
+</div>
+{{partial "footer.html" .}}
