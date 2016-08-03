@@ -1,0 +1,34 @@
+baseurl = "http://replace-this-with-your-hugo-site.com/"
+languageCode = "zh-Hans"
+title = "Weisd Blog"
+theme = "kalium"
+
+# 菜单根据session自动生成
+SectionPagesMenu = "main"
+# 每页显示数量
+# Paginate = 10
+canonifyurls = true
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+
+[params]
+	author = "Weisd"
+	address = "北京"
+    email = "weishidavip@163.com"
+	work = "golang"
+
+
+[[menu.main]]
+    name = "首页"
+    #越小越靠前
+    weight = -999
+    identifier = "home"
+    url = "/"
+[[menu.main]]
+    name = "文章"
+    #越小越靠前
+    weight = -110
+    identifier = "posts"
+    url = "/posts"
