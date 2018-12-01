@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>Go语言命名规范 | Weisd&#39; Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Go语言命名规范什么是好的变量名？ 一致（易于猜测） 简短（容易打字） 准确（易于理解）  经验总结变量声明与其使用位置之间的距离越大， 名称就应该越长。 使用驼峰命令法MixedCase不要使用下划线 首字母缩略词，应该全部使用大写，比如ServeHTTP、IDProcessor，ID,HTTP全大写 局部变量保持简短，长名称容易模糊了代码的作用。 常见的变量/类型组合可以使用非常短的名称：">
+<meta name="keywords" content="Develop,Go">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go语言命名规范">
+<meta property="og:url" content="http://www.weisd.in/2018/11/10/golang-standard-names/index.html">
+<meta property="og:site_name" content="Weisd&#39; Blog">
+<meta property="og:description" content="Go语言命名规范什么是好的变量名？ 一致（易于猜测） 简短（容易打字） 准确（易于理解）  经验总结变量声明与其使用位置之间的距离越大， 名称就应该越长。 使用驼峰命令法MixedCase不要使用下划线 首字母缩略词，应该全部使用大写，比如ServeHTTP、IDProcessor，ID,HTTP全大写 局部变量保持简短，长名称容易模糊了代码的作用。 常见的变量/类型组合可以使用非常短的名称：">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-01T18:56:43.488Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Go语言命名规范">
+<meta name="twitter:description" content="Go语言命名规范什么是好的变量名？ 一致（易于猜测） 简短（容易打字） 准确（易于理解）  经验总结变量声明与其使用位置之间的距离越大， 名称就应该越长。 使用驼峰命令法MixedCase不要使用下划线 首字母缩略词，应该全部使用大写，比如ServeHTTP、IDProcessor，ID,HTTP全大写 局部变量保持简短，长名称容易模糊了代码的作用。 常见的变量/类型组合可以使用非常短的名称：">
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/index.css">
+</head>
+</html>
+<body style="
+
+
+  background-color: #eff0f6
+
+">
+  <div id="container">
+    <nav id="nav">
+  <header class="header">
+    <a href="/" class="title">Weisd&#39; Blog</a>
+  </header>
+  <div class="ctnWrap">
+    <div class="icons">
+      
+        
+          
+            <a href="https://github.com/weisd" target="_blank" class="nav-icn iconfont icon-github"></a>
+          
+        
+      
+    </div>
+    <div class="menu">
+      
+        
+            <a href="/" class="nav-menu ">首页</a>
+          
+        
+            <a href="/tags" class="nav-menu ">标签</a>
+          
+        
+            <a href="/categories" class="nav-menu ">分类</a>
+          
+        
+            <a href="/archives" class="nav-menu ">归档</a>
+          
+        
+            <a href="/about" class="nav-menu ">点我</a>
+          
+        
+      
+    </div>
+  </div>
+</nav>
+    <div id="main"><section class="article">
+  <h2 class="title">Go语言命名规范</h2>
+  <p class="sub">11月 10, 2018</p>
+  <article class="content">
+    <h1 id="Go语言命名规范"><a href="#Go语言命名规范" class="headerlink" title="Go语言命名规范"></a>Go语言命名规范</h1><h2 id="什么是好的变量名？"><a href="#什么是好的变量名？" class="headerlink" title="什么是好的变量名？"></a>什么是好的变量名？</h2><ul>
+<li>一致（易于猜测）</li>
+<li>简短（容易打字）</li>
+<li>准确（易于理解）</li>
+</ul>
+<h2 id="经验总结"><a href="#经验总结" class="headerlink" title="经验总结"></a>经验总结</h2><p>变量声明与其使用位置之间的距离越大， 名称就应该越长。</p>
+<h2 id="使用驼峰命令法MixedCase"><a href="#使用驼峰命令法MixedCase" class="headerlink" title="使用驼峰命令法MixedCase"></a>使用驼峰命令法MixedCase</h2><p>不要使用下划线</p>
+<p>首字母缩略词，应该全部使用大写，比如ServeHTTP、IDProcessor，ID,HTTP全大写</p>
+<h2 id="局部变量"><a href="#局部变量" class="headerlink" title="局部变量"></a>局部变量</h2><p>保持简短，长名称容易模糊了代码的作用。</p>
+<p>常见的变量/类型组合可以使用非常短的名称：</p>
+<p>用 i 表示 index</p>
+<p>用 r 表示 reader</p>
+<p>用 b 表示 buffer</p>
+<p>根据上下文，避免使用冗余名称：</p>
+<p>在函数 RuneCount 内用 count 而不是 runeCount</p>
+<p>用 ok 判断 Key 是否存在 Map 中</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">v，ok：= m [k]</span><br></pre></td></tr></table></figure>
+<p>较长的名称可能有助于长函数或具有许多局部变量的函数。</p>
+<p>（但这通常意味着你应该重构。）</p>
+<p>一个不太好的例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">RuneCount</span><span class="params">(buffer []<span class="keyword">byte</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">    runeCount := <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> index := <span class="number">0</span>; index &lt; <span class="built_in">len</span>(buffer); &#123;</span><br><span class="line">        <span class="keyword">if</span> buffer[index] &lt; RuneSelf &#123;</span><br><span class="line">            index++</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            _, size := DecodeRune(buffer[index:])</span><br><span class="line">            index += size</span><br><span class="line">        &#125;</span><br><span class="line">        runeCount++</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> runeCount</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>一个好例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">RuneCount</span><span class="params">(b []<span class="keyword">byte</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">    count := <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(b); &#123;</span><br><span class="line">        <span class="keyword">if</span> b[i] &lt; RuneSelf &#123;</span><br><span class="line">            i++</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            _, n := DecodeRune(b[i:])</span><br><span class="line">            i += n</span><br><span class="line">        &#125;</span><br><span class="line">        count++</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> count</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h2><p>函数参数类似于局部变量， 但它们也可用作说明文档。</p>
+<p>如果类型是描述性的，它们应该简短：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">AfterFunc</span><span class="params">(d Duration, f <span class="keyword">func</span>()</span>) *<span class="title">Timer</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="title">Escape</span><span class="params">(w io.Writer, s []<span class="keyword">byte</span>)</span></span></span><br></pre></td></tr></table></figure>
+<p>例子中 Duration、 func()、Writer、[]byte 从字面就知道是什么类型，所以变量名使用简短的单个字母</p>
+<p>如果类型更模糊，名称可能提供文档：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Unix</span><span class="params">(sec, nsec <span class="keyword">int64</span>)</span> <span class="title">Time</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="title">HasPrefix</span><span class="params">(s, prefix []<span class="keyword">byte</span>)</span> <span class="title">bool</span></span></span><br></pre></td></tr></table></figure>
+<p>例子中 int64、 []byte 有两个相同类型参数，为了区别而使用较长单词起来说明的什么用</p>
+<h2 id="返回值"><a href="#返回值" class="headerlink" title="返回值"></a>返回值</h2><p>函数的返回值命令可作为文档帮助了解函数。</p>
+<p>下面是一个很好的例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Copy</span><span class="params">(dst Writer, src Reader)</span> <span class="params">(written <span class="keyword">int64</span>, err error)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="title">ScanBytes</span><span class="params">(data []<span class="keyword">byte</span>, atEOF <span class="keyword">bool</span>)</span> <span class="params">(advance <span class="keyword">int</span>, token []<span class="keyword">byte</span>, err error)</span></span></span><br></pre></td></tr></table></figure>
+<h2 id="接收器-结构体-Receivers"><a href="#接收器-结构体-Receivers" class="headerlink" title="接收器 结构体 Receivers"></a>接收器 结构体 Receivers</h2><p>接收者是一种特殊的参数。</p>
+<p>按照惯例，它们是反映结构类型的一个或两个字符</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *Buffer)</span> <span class="title">Read</span><span class="params">(p []<span class="keyword">byte</span>)</span> <span class="params">(n <span class="keyword">int</span>, err error)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="params">(sh serverHandler)</span> <span class="title">ServeHTTP</span><span class="params">(rw ResponseWriter, req *Request)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="params">(r Rectangle)</span> <span class="title">Size</span><span class="params">()</span> <span class="title">Point</span></span></span><br></pre></td></tr></table></figure>
+<p>同一个结构体中的所有方法中Receivers变量名应该是一致的。 （不要一个方法用r,另一种方法用rdr）</p>
+<h2 id="导出的包级别名称"><a href="#导出的包级别名称" class="headerlink" title="导出的包级别名称"></a>导出的包级别名称</h2><p>导出的名称不要包含所在的Package名。</p>
+<p>在命名导出的变量，常量，函数和类型时请记住这一点。</p>
+<p>这就是为什么我们用bytes.Buffer和strings.Reader， 而不用bytes.ByteBuffer和strings.StringReader</p>
+<h2 id="接口类型"><a href="#接口类型" class="headerlink" title="接口类型"></a>接口类型</h2><p>仅有一个方法的接口通常在后面加“er”</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Reader <span class="keyword">interface</span> &#123; </span><br><span class="line">    Read（p []<span class="keyword">byte</span>）（n <span class="keyword">int</span>, err error）</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>即使不是正确的英文单词也所谓</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Execer <span class="keyword">interface</span> &#123; </span><br><span class="line">    Exec（query <span class="keyword">string</span>, args []Value）（Result, error）</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有时我们使用英文单词，让他看起来更好：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> ByteReader <span class="keyword">interface</span> &#123;</span><br><span class="line">    ReadByte() (c <span class="keyword">byte</span>, err error)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当接口包括多个方法时，使用准确地描述其用途的名称（例如：net.Conn，http.ResponseWriter，io.ReadWriter）</p>
+<h2 id="错误类型"><a href="#错误类型" class="headerlink" title="错误类型"></a>错误类型</h2><p>定义错误类型时应用使用以下形式FooError，以Error结尾：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> ExitError <span class="keyword">struct</span> &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>字义错误值时应为以下形式ErrFoo，以Err开头：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ErrFormat = errors.New(<span class="string">"image: unknown format"</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="包"><a href="#包" class="headerlink" title="包"></a>包</h2><p>使用让导入者更好解决整个包作用的名称，避开util，common等</p>
+<h2 id="导入路径"><a href="#导入路径" class="headerlink" title="导入路径"></a>导入路径</h2><p>包路径的最后一个名称应该与包名相同</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"compress/gzip"</span> <span class="comment">// package gzip</span></span><br></pre></td></tr></table></figure>
+<p>避免重复意义的包路径：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"code.google.com/p/goauth2/oauth2"</span> <span class="comment">// bad; my fault</span></span><br></pre></td></tr></table></figure>
+<p>对于库，它通常用于将包代码放在repo根目录中：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"github.com/golang/oauth2"</span> <span class="comment">// package oauth2</span></span><br></pre></td></tr></table></figure>
+<p>还要避免使用大写字母（并非所有文件系统都区分大小写）</p>
+<h2 id="标准库"><a href="#标准库" class="headerlink" title="标准库"></a>标准库</h2><p>本文中的许多示例来自标准库。</p>
+<p>标准库是查找优秀Go代码的好地方。</p>
+<p>翻阅标准库来寻找灵感。</p>
+<p>但要注意：</p>
+<p>编写标准库时，我们还在学习。</p>
+<p>其中大部分都是正确的，但也有一些错误。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>使用短名称。</p>
+<p>考虑上下文。</p>
+<p>用你的判断</p>
+<h2 id="原文"><a href="#原文" class="headerlink" title="原文"></a>原文</h2><p><a href="https://talks.golang.org/2014/names.slide" target="_blank" rel="noopener">https://talks.golang.org/2014/names.slide</a></p>
+
+  </article>
+  <footer class="f-cf">
+    
+      <a href="/2018/11/11/golang-grateful-shutdown/" class="link f-fl">⟵Go不中断程序优雅重启服务Grateful Shutdown</a>
+    
+    
+      <a href="/2018/11/10/install-drone/" class="link f-fr">在CentOS上安装Drone1.0，使用Gogs⟶</a>
+    
+  </footer>
+</section></div>
+    <footer id="footer" class="f-cf">
+  im@weisd.com
+  
+    
+      
+        · <a href="https://github.com/weisd" target="_blank" class="nav-icn">GitHub</a>
+      
+    
+  
+  <span class="copyright">All rights reserved @Weisd</span>
+</footer>
+  </div>
+</body>
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?ddca1546882b669f0d257294aadf8c63";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+  </script>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>使用Drone自动远程部署Go项目 | Weisd&#39; Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="使用Drone自动远程部署Go项目本文使用Drone 0.8 开启项目Drone支持首先在你的Drone的Account&amp;gt;Repositories中找到你要支持的git仓库，点击右则的开关开户Drone支持，开启后会在你的git仓库WebHooks中添加一个发往Drone服务器的配置，开户后记得去git仓库测试一下Webhook是否正常 在项目目录下创建.drone.yml配置文件下面">
+<meta name="keywords" content="Go,Ops,Drone">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Drone自动远程部署Go项目">
+<meta property="og:url" content="http://www.weisd.in/2018/11/14/golang-application-deploy-use-drone/index.html">
+<meta property="og:site_name" content="Weisd&#39; Blog">
+<meta property="og:description" content="使用Drone自动远程部署Go项目本文使用Drone 0.8 开启项目Drone支持首先在你的Drone的Account&amp;gt;Repositories中找到你要支持的git仓库，点击右则的开关开户Drone支持，开启后会在你的git仓库WebHooks中添加一个发往Drone服务器的配置，开户后记得去git仓库测试一下Webhook是否正常 在项目目录下创建.drone.yml配置文件下面">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-01T18:56:43.488Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用Drone自动远程部署Go项目">
+<meta name="twitter:description" content="使用Drone自动远程部署Go项目本文使用Drone 0.8 开启项目Drone支持首先在你的Drone的Account&amp;gt;Repositories中找到你要支持的git仓库，点击右则的开关开户Drone支持，开启后会在你的git仓库WebHooks中添加一个发往Drone服务器的配置，开户后记得去git仓库测试一下Webhook是否正常 在项目目录下创建.drone.yml配置文件下面">
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/index.css">
+</head>
+</html>
+<body style="
+
+
+  background-color: #eff0f6
+
+">
+  <div id="container">
+    <nav id="nav">
+  <header class="header">
+    <a href="/" class="title">Weisd&#39; Blog</a>
+  </header>
+  <div class="ctnWrap">
+    <div class="icons">
+      
+        
+          
+            <a href="https://github.com/weisd" target="_blank" class="nav-icn iconfont icon-github"></a>
+          
+        
+      
+    </div>
+    <div class="menu">
+      
+        
+            <a href="/" class="nav-menu ">首页</a>
+          
+        
+            <a href="/tags" class="nav-menu ">标签</a>
+          
+        
+            <a href="/categories" class="nav-menu ">分类</a>
+          
+        
+            <a href="/archives" class="nav-menu ">归档</a>
+          
+        
+            <a href="/about" class="nav-menu ">点我</a>
+          
+        
+      
+    </div>
+  </div>
+</nav>
+    <div id="main"><section class="article">
+  <h2 class="title">使用Drone自动远程部署Go项目</h2>
+  <p class="sub">11月 14, 2018</p>
+  <article class="content">
+    <h1 id="使用Drone自动远程部署Go项目"><a href="#使用Drone自动远程部署Go项目" class="headerlink" title="使用Drone自动远程部署Go项目"></a>使用Drone自动远程部署Go项目</h1><p>本文使用Drone 0.8</p>
+<h2 id="开启项目Drone支持"><a href="#开启项目Drone支持" class="headerlink" title="开启项目Drone支持"></a>开启项目Drone支持</h2><p>首先在你的Drone的Account&gt;Repositories中找到你要支持的git仓库，点击右则的开关开户Drone支持，开启后会在你的git仓库WebHooks中添加一个发往Drone服务器的配置，开户后记得去git仓库测试一下Webhook是否正常</p>
+<h2 id="在项目目录下创建-drone-yml配置文件"><a href="#在项目目录下创建-drone-yml配置文件" class="headerlink" title="在项目目录下创建.drone.yml配置文件"></a>在项目目录下创建.drone.yml配置文件</h2><p>下面是一个远程发布Go项目的例子</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">workspace:</span></span><br><span class="line"><span class="attr">  base:</span> <span class="string">/go</span></span><br><span class="line"></span><br><span class="line"><span class="attr">pipeline:</span></span><br><span class="line"><span class="attr">  build:</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">golang</span></span><br><span class="line"><span class="attr">    commands:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">echo</span> <span class="string">$GOPATH</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">pwd</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">go</span> <span class="string">build</span> <span class="bullet">-o</span> <span class="string">goexec_build_from_drone</span></span><br><span class="line"></span><br><span class="line"><span class="attr">  deploy:</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">appleboy/drone-scp</span></span><br><span class="line"><span class="attr">    host:</span> <span class="number">172.17</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line"><span class="attr">    port:</span> <span class="number">22</span></span><br><span class="line"><span class="attr">    username:</span> <span class="string">root</span></span><br><span class="line"><span class="attr">    secrets:</span> <span class="string">[</span> <span class="string">ssh_key</span> <span class="string">]</span></span><br><span class="line">    <span class="comment"># key: [ ssh_key ]</span></span><br><span class="line"><span class="attr">    target:</span> <span class="string">/data/ci/geekbang</span></span><br><span class="line"><span class="attr">    source:</span> <span class="string">goexec_build_from_drone</span></span><br><span class="line"></span><br><span class="line"><span class="attr">  run:</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">appleboy/drone-ssh</span></span><br><span class="line"><span class="attr">    host:</span> <span class="number">172.17</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line"><span class="attr">    port:</span> <span class="number">22</span></span><br><span class="line"><span class="attr">    username:</span> <span class="string">root</span></span><br><span class="line"><span class="attr">    secrets:</span> <span class="string">[</span> <span class="string">ssh_key</span> <span class="string">]</span></span><br><span class="line"><span class="attr">    script:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">cd</span> <span class="string">/data/ci/geekbang</span> <span class="string">&amp;&amp;</span> <span class="string">git</span> <span class="string">pull</span> </span><br><span class="line"><span class="bullet">      -</span> <span class="string">systemctl</span> <span class="string">stop</span> <span class="string">geekbang</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">mv</span> <span class="bullet">-f</span> <span class="string">/data/ci/geekbang/geek</span>  <span class="string">/data/ci/geekbang/geek.bak</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">mv</span> <span class="string">/data/ci/geekbang/geek_build_from_drone</span> <span class="string">/data/ci/geekbang/geek</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">systemctl</span> <span class="string">start</span> <span class="string">geekbang</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">systemctl</span> <span class="string">status</span> <span class="string">geekbang</span></span><br><span class="line"></span><br><span class="line"><span class="attr">branches:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
+<p>例子中分三步:</p>
+<ol>
+<li>build 编辑Go代码</li>
+<li>deploy 把编译好的可执行文件scp到远程服务器</li>
+<li>run 通过ssh执行远程命令更新服务</li>
+</ol>
+<p>例子中使用的插件：<br><a href="http://plugins.drone.io/appleboy/drone-scp/" target="_blank" rel="noopener">SCP</a><br><a href="http://plugins.drone.io/appleboy/drone-ssh/" target="_blank" rel="noopener">SSH</a></p>
+<h2 id="安装Drone-cli"><a href="#安装Drone-cli" class="headerlink" title="安装Drone-cli"></a>安装Drone-cli</h2><p>上面例子中，用到了secrets存储一些私密信息,需要使用drone-cli来管理secrets</p>
+<p>下面是Linux系统安装方法</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl -L https://github.com/drone/drone-cli/releases/download/v0.8.6/drone_linux_amd64.tar.gz | tar zx</span><br><span class="line">sudo install -t /usr/<span class="built_in">local</span>/bin drone</span><br></pre></td></tr></table></figure>
+<p>其他平台参考：<br><a href="https://0-8-0.docs.drone.io/cli-installation/" target="_blank" rel="noopener">https://0-8-0.docs.drone.io/cli-installation/</a></p>
+<h2 id="管理secrets"><a href="#管理secrets" class="headerlink" title="管理secrets"></a>管理secrets</h2><p>例子中使用ssh-key登记远程系统，下面方法通过文件添加ssh私钥，@后为文件绝对路径，–name的值为ssh插件指定的值，参考插件说明</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">drone secret add --repository weisd/geek --name ssh_key --value @/root/.ssh/id_rsa</span><br></pre></td></tr></table></figure>
+<h2 id="提交代码，查看Drone情况"><a href="#提交代码，查看Drone情况" class="headerlink" title="提交代码，查看Drone情况"></a>提交代码，查看Drone情况</h2><p>git提交到远程服务器后，就可以看到Drone对应仓库有任务在处理了</p>
+<h2 id="更多命令官方文档"><a href="#更多命令官方文档" class="headerlink" title="更多命令官方文档"></a>更多命令官方文档</h2><p><a href="https://0-8-0.docs.drone.io/getting-started/" target="_blank" rel="noopener">https://0-8-0.docs.drone.io/getting-started/</a></p>
+
+  </article>
+  <footer class="f-cf">
+    
+      <a href="/2018/11/15/syncthing/" class="link f-fl">⟵使用Syncthing在服务器间同步文件</a>
+    
+    
+      <a href="/2018/11/14/install-drone08/" class="link f-fr">在CentOS上安装Drone0.8，使用Gogs⟶</a>
+    
+  </footer>
+</section></div>
+    <footer id="footer" class="f-cf">
+  im@weisd.com
+  
+    
+      
+        · <a href="https://github.com/weisd" target="_blank" class="nav-icn">GitHub</a>
+      
+    
+  
+  <span class="copyright">All rights reserved @Weisd</span>
+</footer>
+  </div>
+</body>
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?ddca1546882b669f0d257294aadf8c63";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+  </script>
+</html>

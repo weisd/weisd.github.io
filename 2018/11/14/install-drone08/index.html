@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>在CentOS上安装Drone0.8，使用Gogs | Weisd&#39; Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="在CentOS上安装Drone0.8，使用Gogs本文是drone0.9版本安装，1.0版本参考：在CentOS上安装Drone1.0，使用Gogs 安装Nginx,Docker,Gogs参考 Nginx安装 Dcoker安装 Gogs安装 docker安装drone0.81docker pull drone/drone:0.8 docker-compose12345678910111213141">
+<meta name="keywords" content="Ops,Drone">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在CentOS上安装Drone0.8，使用Gogs">
+<meta property="og:url" content="http://www.weisd.in/2018/11/14/install-drone08/index.html">
+<meta property="og:site_name" content="Weisd&#39; Blog">
+<meta property="og:description" content="在CentOS上安装Drone0.8，使用Gogs本文是drone0.9版本安装，1.0版本参考：在CentOS上安装Drone1.0，使用Gogs 安装Nginx,Docker,Gogs参考 Nginx安装 Dcoker安装 Gogs安装 docker安装drone0.81docker pull drone/drone:0.8 docker-compose12345678910111213141">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-01T18:56:43.488Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在CentOS上安装Drone0.8，使用Gogs">
+<meta name="twitter:description" content="在CentOS上安装Drone0.8，使用Gogs本文是drone0.9版本安装，1.0版本参考：在CentOS上安装Drone1.0，使用Gogs 安装Nginx,Docker,Gogs参考 Nginx安装 Dcoker安装 Gogs安装 docker安装drone0.81docker pull drone/drone:0.8 docker-compose12345678910111213141">
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/index.css">
+</head>
+</html>
+<body style="
+
+
+  background-color: #eff0f6
+
+">
+  <div id="container">
+    <nav id="nav">
+  <header class="header">
+    <a href="/" class="title">Weisd&#39; Blog</a>
+  </header>
+  <div class="ctnWrap">
+    <div class="icons">
+      
+        
+          
+            <a href="https://github.com/weisd" target="_blank" class="nav-icn iconfont icon-github"></a>
+          
+        
+      
+    </div>
+    <div class="menu">
+      
+        
+            <a href="/" class="nav-menu ">首页</a>
+          
+        
+            <a href="/tags" class="nav-menu ">标签</a>
+          
+        
+            <a href="/categories" class="nav-menu ">分类</a>
+          
+        
+            <a href="/archives" class="nav-menu ">归档</a>
+          
+        
+            <a href="/about" class="nav-menu ">点我</a>
+          
+        
+      
+    </div>
+  </div>
+</nav>
+    <div id="main"><section class="article">
+  <h2 class="title">在CentOS上安装Drone0.8，使用Gogs</h2>
+  <p class="sub">11月 14, 2018</p>
+  <article class="content">
+    <h1 id="在CentOS上安装Drone0-8，使用Gogs"><a href="#在CentOS上安装Drone0-8，使用Gogs" class="headerlink" title="在CentOS上安装Drone0.8，使用Gogs"></a>在CentOS上安装Drone0.8，使用Gogs</h1><p>本文是drone0.9版本安装，1.0版本参考：<a href="../install-drone">在CentOS上安装Drone1.0，使用Gogs</a></p>
+<h2 id="安装Nginx-Docker-Gogs"><a href="#安装Nginx-Docker-Gogs" class="headerlink" title="安装Nginx,Docker,Gogs"></a>安装Nginx,Docker,Gogs</h2><p>参考</p>
+<p><a href="../install-nginx">Nginx安装</a></p>
+<p><a href="../install-docker-on-centos7">Dcoker安装</a></p>
+<p><a href="../install-gogs-from-docker">Gogs安装</a></p>
+<h2 id="docker安装drone0-8"><a href="#docker安装drone0-8" class="headerlink" title="docker安装drone0.8"></a>docker安装drone0.8</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull drone/drone:0.8</span><br></pre></td></tr></table></figure>
+<h2 id="docker-compose"><a href="#docker-compose" class="headerlink" title="docker-compose"></a>docker-compose</h2><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">'2'</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line"><span class="attr">  drone-server:</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">drone/drone:0.8</span></span><br><span class="line"></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="number">10081</span><span class="string">:8000</span></span><br><span class="line"><span class="bullet">      -</span> <span class="number">9000</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">/var/lib/drone:/var/lib/drone/</span></span><br><span class="line"><span class="attr">    restart:</span> <span class="string">always</span></span><br><span class="line"><span class="attr">    environment:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">DRONE_OPEN=true</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">DRONE_HOST=http://drone.weisd.in</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">DRONE_GOGS=true</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">DRONE_GOGS_URL=http://git.weisd.in</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">DRONE_SECRET=$&#123;DRONE_SECRET&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">  drone-agent:</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">drone/agent:0.8</span></span><br><span class="line"></span><br><span class="line"><span class="attr">    restart:</span> <span class="string">always</span></span><br><span class="line"><span class="attr">    depends_on:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">drone-server</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">/var/run/docker.sock:/var/run/docker.sock</span></span><br><span class="line"><span class="attr">    environment:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">DRONE_SERVER=drone-server:9000</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">DRONE_SECRET=$&#123;DRONE_SECRET&#125;</span></span><br></pre></td></tr></table></figure>
+<p>例子中 drone.weisd.in为drone的服务域名，git.weisd.in为gogs的服务域名，修改为你自己的</p>
+<p>启动服务， 因为agent依赖server, 所以最好等server启动完成后再启动agent</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker-compose up -d drone-server</span><br><span class="line">docker-compose up -d drone-agent</span><br></pre></td></tr></table></figure>
+<p>例子中使用端口10081</p>
+<h2 id="添加Nginx代理配置"><a href="#添加Nginx代理配置" class="headerlink" title="添加Nginx代理配置"></a>添加Nginx代理配置</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/nginx/conf.d/drone.conf</span><br></pre></td></tr></table></figure>
+<p>输入内容如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen       80;</span><br><span class="line">    server_name drone.weisd.in;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass http://localhost:10081;</span><br><span class="line">        proxy_set_header Host $host:$server_port;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>重启Nginx</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure>
+<h2 id="访问"><a href="#访问" class="headerlink" title="访问"></a>访问</h2><p><a href="http://drone.weisd.in" target="_blank" rel="noopener">http://drone.weisd.in</a></p>
+<p>输入你Gogs的账号密码就可以登陆了</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>官方文档</p>
+<p><a href="https://0-8-0.docs.drone.io/install-for-gogs/" target="_blank" rel="noopener">https://0-8-0.docs.drone.io/install-for-gogs/</a></p>
+
+  </article>
+  <footer class="f-cf">
+    
+      <a href="/2018/11/14/golang-application-deploy-use-drone/" class="link f-fl">⟵使用Drone自动远程部署Go项目</a>
+    
+    
+      <a href="/2018/11/14/golang-gratefull-shutdown-with-waitgroup/" class="link f-fr">Go结合WaitGroup安全关闭程序⟶</a>
+    
+  </footer>
+</section></div>
+    <footer id="footer" class="f-cf">
+  im@weisd.com
+  
+    
+      
+        · <a href="https://github.com/weisd" target="_blank" class="nav-icn">GitHub</a>
+      
+    
+  
+  <span class="copyright">All rights reserved @Weisd</span>
+</footer>
+  </div>
+</body>
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?ddca1546882b669f0d257294aadf8c63";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+  </script>
+</html>

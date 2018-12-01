@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>Go结合WaitGroup安全关闭程序 | Weisd&#39; Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Go程序在关闭程序前总有一些close操作要做，下面介绍一种使用WaitGroup优雅的关闭程序的方法 大致流程：  服务通常有一个Run方法阻塞进程，一个Stop方法通知Run方法退出 创建一个exit chan 作为通知goroutine退出的通道 用os.Signal监听退出操作，关闭exitChan通知goroutine退出 goroutine中再启goroutine监听exitChan">
+<meta name="keywords" content="Develop,Go">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go结合WaitGroup安全关闭程序">
+<meta property="og:url" content="http://www.weisd.in/2018/11/14/golang-gratefull-shutdown-with-waitgroup/index.html">
+<meta property="og:site_name" content="Weisd&#39; Blog">
+<meta property="og:description" content="Go程序在关闭程序前总有一些close操作要做，下面介绍一种使用WaitGroup优雅的关闭程序的方法 大致流程：  服务通常有一个Run方法阻塞进程，一个Stop方法通知Run方法退出 创建一个exit chan 作为通知goroutine退出的通道 用os.Signal监听退出操作，关闭exitChan通知goroutine退出 goroutine中再启goroutine监听exitChan">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-01T18:56:43.488Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Go结合WaitGroup安全关闭程序">
+<meta name="twitter:description" content="Go程序在关闭程序前总有一些close操作要做，下面介绍一种使用WaitGroup优雅的关闭程序的方法 大致流程：  服务通常有一个Run方法阻塞进程，一个Stop方法通知Run方法退出 创建一个exit chan 作为通知goroutine退出的通道 用os.Signal监听退出操作，关闭exitChan通知goroutine退出 goroutine中再启goroutine监听exitChan">
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/index.css">
+</head>
+</html>
+<body style="
+
+
+  background-color: #eff0f6
+
+">
+  <div id="container">
+    <nav id="nav">
+  <header class="header">
+    <a href="/" class="title">Weisd&#39; Blog</a>
+  </header>
+  <div class="ctnWrap">
+    <div class="icons">
+      
+        
+          
+            <a href="https://github.com/weisd" target="_blank" class="nav-icn iconfont icon-github"></a>
+          
+        
+      
+    </div>
+    <div class="menu">
+      
+        
+            <a href="/" class="nav-menu ">首页</a>
+          
+        
+            <a href="/tags" class="nav-menu ">标签</a>
+          
+        
+            <a href="/categories" class="nav-menu ">分类</a>
+          
+        
+            <a href="/archives" class="nav-menu ">归档</a>
+          
+        
+            <a href="/about" class="nav-menu ">点我</a>
+          
+        
+      
+    </div>
+  </div>
+</nav>
+    <div id="main"><section class="article">
+  <h2 class="title">Go结合WaitGroup安全关闭程序</h2>
+  <p class="sub">11月 14, 2018</p>
+  <article class="content">
+    <p>Go程序在关闭程序前总有一些close操作要做，下面介绍一种使用WaitGroup优雅的关闭程序的方法</p>
+<p>大致流程：</p>
+<ol>
+<li>服务通常有一个Run方法阻塞进程，一个Stop方法通知Run方法退出</li>
+<li>创建一个exit chan 作为通知goroutine退出的通道</li>
+<li>用os.Signal监听退出操作，关闭exitChan通知goroutine退出</li>
+<li>goroutine中再启goroutine监听exitChan关闭自己的服务，非正常服务关闭则主动关闭exitChan通知其他goroutine退出</li>
+<li>使用WaitGroup等待所有服务goroutine退出</li>
+</ol>
+<p>话不多说，直接上代码</p>
+<p>WaitGruop封装</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// WaitGroupWrapper WaitGroupWrapper</span></span><br><span class="line"><span class="keyword">type</span> WaitGroupWrapper <span class="keyword">struct</span> &#123;</span><br><span class="line">  sync.WaitGroup</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Wrap Wrap</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(w *WaitGroupWrapper)</span> <span class="title">Wrap</span><span class="params">(fn <span class="keyword">func</span>()</span>)</span> &#123;</span><br><span class="line">  w.Add(<span class="number">1</span>)</span><br><span class="line">  <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">defer</span> w.Done()</span><br><span class="line">    fn()</span><br><span class="line">  &#125;()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>main.go</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// exit 一个chan 用户关闭程序时，通过goroutine退出</span></span><br><span class="line">exitChan := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// c 监听signal，退出程序</span></span><br><span class="line">c := <span class="built_in">make</span>(<span class="keyword">chan</span> os.Signal, <span class="number">1</span>)</span><br><span class="line">signal.Notify(c, syscall.SIGHUP, syscall.SIGQUIT, syscall.SIGTERM, syscall.SIGINT)</span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">  <span class="keyword">for</span> &#123;</span><br><span class="line">    s := &lt;-c</span><br><span class="line">    <span class="keyword">switch</span> s &#123;</span><br><span class="line">      <span class="keyword">case</span> syscall.SIGQUIT, syscall.SIGTERM, syscall.SIGINT:</span><br><span class="line">      <span class="comment">// 收到退出signal是地关闭 exitChan</span></span><br><span class="line">      <span class="built_in">close</span>(exitChan)</span><br><span class="line">      <span class="keyword">return</span></span><br><span class="line">    <span class="keyword">case</span> syscall.SIGHUP:</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">      <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建一个WaitGroup</span></span><br><span class="line">w := &amp;WaitGroupWrapper&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 一个goroutine启动echo</span></span><br><span class="line">w.Wrap(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">  e := echo.New()</span><br><span class="line">  <span class="comment">// Routes</span></span><br><span class="line">  e.Static(<span class="string">"/"</span>, conf.DataDir)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">select</span> &#123;</span><br><span class="line">      <span class="comment">// 监听exitChan, 退出执行echo.Shutdown</span></span><br><span class="line">      <span class="keyword">case</span> &lt;-exitChan:</span><br><span class="line">        ctx, cancel := context.WithTimeout(context.Background(), time.Second*<span class="number">10</span>)</span><br><span class="line">        <span class="keyword">defer</span> cancel()</span><br><span class="line">        e.Shutdown(ctx)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;()</span><br><span class="line">  <span class="comment">// Start server</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> err := e.Start(conf.HTTP.Listen); err != <span class="literal">nil</span> &#123;</span><br><span class="line">    <span class="comment">// 因为echo有可能启动失败，所以不是Shutdown通知的错误，主动关闭exitChan通知其他goroutine退出</span></span><br><span class="line">    <span class="keyword">if</span> err != http.ErrServerClosed &#123;</span><br><span class="line">      <span class="comment">// 如果不是主动关闭，退出程序</span></span><br><span class="line">      <span class="built_in">close</span>(exitChan)</span><br><span class="line">      <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 一个goroutine启动cron</span></span><br><span class="line">w.Wrap(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">  cron := cron.New()</span><br><span class="line">  cron.AddFunc(Conf.CronEntry, <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">if</span> err := doSometing(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">      log.Println(err)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">select</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> &lt;-exit:</span><br><span class="line">      <span class="comment">// Stop方法会通过cron退出</span></span><br><span class="line">      cron.Stop()</span><br><span class="line">      <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;()</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Run会阻塞，没有错误返回值</span></span><br><span class="line">  cron.Run()</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 收到Stop通知后Run()退出</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">w.Wait()</span><br></pre></td></tr></table></figure>
+<p>例子中有两个服务goroutine， 一个echo httpserver, 一个cron定时任务</p>
+<p>httpserver启动时可以出现错误，所以判断不是正常关闭则主动关闭exitChan</p>
+<p>cron.Run没有错误，所以只监听exitChan退出就行了</p>
+<p>http优雅重启参考之前的文章：<a href="../golang-grateful-shutdown">Go不中断程序优雅重启服务Grateful Shutdown</a></p>
+
+  </article>
+  <footer class="f-cf">
+    
+      <a href="/2018/11/14/install-drone08/" class="link f-fl">⟵在CentOS上安装Drone0.8，使用Gogs</a>
+    
+    
+      <a href="/2018/11/11/golang-grateful-shutdown/" class="link f-fr">Go不中断程序优雅重启服务Grateful Shutdown⟶</a>
+    
+  </footer>
+</section></div>
+    <footer id="footer" class="f-cf">
+  im@weisd.com
+  
+    
+      
+        · <a href="https://github.com/weisd" target="_blank" class="nav-icn">GitHub</a>
+      
+    
+  
+  <span class="copyright">All rights reserved @Weisd</span>
+</footer>
+  </div>
+</body>
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?ddca1546882b669f0d257294aadf8c63";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+  </script>
+</html>

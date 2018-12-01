@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>支付成功异步添加权限，编写最终一致性SQL | Weisd&#39; Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="支付成功异步添加权限，编写最终一致性SQL使用消息队列，如果更新失败，重新放回队列，编写最终一致性SQL，不管重复执行多疼SQL操作，结果都一样 添加权限消息队列处理 查询用户旧权限 更新权限  无记录：添加或更新  1INSERT INTO user_permissions (uid,expire) Values (?,?) ON DUPLICATE KEY UPDATE expire = e">
+<meta name="keywords" content="Develop">
+<meta property="og:type" content="article">
+<meta property="og:title" content="支付成功异步添加权限，编写最终一致性SQL">
+<meta property="og:url" content="http://www.weisd.in/2018/12/02/user-permission-add/index.html">
+<meta property="og:site_name" content="Weisd&#39; Blog">
+<meta property="og:description" content="支付成功异步添加权限，编写最终一致性SQL使用消息队列，如果更新失败，重新放回队列，编写最终一致性SQL，不管重复执行多疼SQL操作，结果都一样 添加权限消息队列处理 查询用户旧权限 更新权限  无记录：添加或更新  1INSERT INTO user_permissions (uid,expire) Values (?,?) ON DUPLICATE KEY UPDATE expire = e">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-01T18:56:43.488Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="支付成功异步添加权限，编写最终一致性SQL">
+<meta name="twitter:description" content="支付成功异步添加权限，编写最终一致性SQL使用消息队列，如果更新失败，重新放回队列，编写最终一致性SQL，不管重复执行多疼SQL操作，结果都一样 添加权限消息队列处理 查询用户旧权限 更新权限  无记录：添加或更新  1INSERT INTO user_permissions (uid,expire) Values (?,?) ON DUPLICATE KEY UPDATE expire = e">
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/index.css">
+</head>
+</html>
+<body style="
+
+
+  background-color: #eff0f6
+
+">
+  <div id="container">
+    <nav id="nav">
+  <header class="header">
+    <a href="/" class="title">Weisd&#39; Blog</a>
+  </header>
+  <div class="ctnWrap">
+    <div class="icons">
+      
+        
+          
+            <a href="https://github.com/weisd" target="_blank" class="nav-icn iconfont icon-github"></a>
+          
+        
+      
+    </div>
+    <div class="menu">
+      
+        
+            <a href="/" class="nav-menu ">首页</a>
+          
+        
+            <a href="/tags" class="nav-menu ">标签</a>
+          
+        
+            <a href="/categories" class="nav-menu ">分类</a>
+          
+        
+            <a href="/archives" class="nav-menu ">归档</a>
+          
+        
+            <a href="/about" class="nav-menu ">点我</a>
+          
+        
+      
+    </div>
+  </div>
+</nav>
+    <div id="main"><section class="article">
+  <h2 class="title">支付成功异步添加权限，编写最终一致性SQL</h2>
+  <p class="sub">12月 2, 2018</p>
+  <article class="content">
+    <h1 id="支付成功异步添加权限，编写最终一致性SQL"><a href="#支付成功异步添加权限，编写最终一致性SQL" class="headerlink" title="支付成功异步添加权限，编写最终一致性SQL"></a>支付成功异步添加权限，编写最终一致性SQL</h1><p>使用消息队列，如果更新失败，重新放回队列，编写最终一致性SQL，不管重复执行多疼SQL操作，结果都一样</p>
+<h2 id="添加权限消息队列处理"><a href="#添加权限消息队列处理" class="headerlink" title="添加权限消息队列处理"></a>添加权限消息队列处理</h2><ol>
+<li>查询用户旧权限</li>
+<li><p>更新权限</p>
+<ol>
+<li><p>无记录：添加或更新</p>
+ <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> user_permissions (uid,<span class="keyword">expire</span>) <span class="keyword">Values</span> (?,?) <span class="keyword">ON</span> <span class="keyword">DUPLICATE</span> <span class="keyword">KEY</span> <span class="keyword">UPDATE</span> <span class="keyword">expire</span> = <span class="keyword">expire</span> + ?</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>有记录：权限旧权限更新 按旧权限日志更新，如果更新失败，回滚退出</p>
+ <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> user_permissions <span class="keyword">SET</span> <span class="keyword">expire</span>= &lt;new_expire&gt; <span class="keyword">WHERE</span> uid = ? <span class="keyword">AND</span> <span class="keyword">expire</span> = &lt;old_expire&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li><p>记录权限添加日志 uid_order唯一，如果更新失败，回滚退出</p>
+ <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> user_permission_logs (uid,order_id,old_expire,new_expire)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>权限更新失败：消息重回队列</p>
+</li>
+<li>更新成功：修改订单发货状态为已完成</li>
+</ol>
+<h2 id="退权限处理"><a href="#退权限处理" class="headerlink" title="退权限处理"></a>退权限处理</h2><ol>
+<li><p>通过订单ID查询权限日志记录</p>
+ <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> user_permission_logs <span class="keyword">WHERE</span> uid = ? <span class="keyword">AND</span>  order_id = ? <span class="keyword">AND</span> is_rollback = <span class="number">0</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查询不到日志记录说明已处理 rollback == 1, 退出，结束</p>
+</li>
+<li><p>查询权限记录</p>
+ <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> user_permissions <span class="keyword">WHERE</span> uid = ?</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>计算应退权限</p>
+</li>
+<li><p>事务更新权限</p>
+ <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> user_permissions <span class="keyword">SET</span> <span class="keyword">expire</span>= &lt;new_expire&gt; <span class="keyword">WHERE</span> uid = ? <span class="keyword">AND</span> <span class="keyword">expire</span> = &lt;old_expire&gt;</span><br></pre></td></tr></table></figure>
+ <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> user_permission_logs <span class="keyword">SET</span> is_rollback = <span class="number">1</span> <span class="keyword">WHERE</span> uid = ? <span class="keyword">AND</span> order_id = ? <span class="keyword">AND</span> is_rollback = <span class="number">1</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>更新成功，修改订单发货状态为已退货</p>
+</li>
+</ol>
+
+  </article>
+  <footer class="f-cf">
+    
+    
+      <a href="/2018/11/22/goim-ring/" class="link f-fr">GoIM源码解读-使用Ring复用对象顺序读写⟶</a>
+    
+  </footer>
+</section></div>
+    <footer id="footer" class="f-cf">
+  im@weisd.com
+  
+    
+      
+        · <a href="https://github.com/weisd" target="_blank" class="nav-icn">GitHub</a>
+      
+    
+  
+  <span class="copyright">All rights reserved @Weisd</span>
+</footer>
+  </div>
+</body>
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?ddca1546882b669f0d257294aadf8c63";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+  </script>
+</html>
